@@ -61,7 +61,7 @@ collections:
                 name: "video"
 
               - label: "Presentation"
-            name: "presentation"
+                name: "presentation"
 
       - label: "Social networks"
         name: "socialNetworks"
