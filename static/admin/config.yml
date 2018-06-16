@@ -1,8 +1,6 @@
 backend:
-  name: git-gateway
-  accept_roles:
-    - admin
-    - editor
+  name: github
+  repo: snak1t/site
 
 media_folder: static/img
 public_folder: /img
