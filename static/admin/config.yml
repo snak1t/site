@@ -53,10 +53,15 @@ collections:
             name: "tags"
             widget: "list"
 
-          - label: "Link to presentation"
+          - label: "Links"
+            name: "links"
+            widget: "object"
+            fields:
+              - label: "Video"
+                name: "video"
+
+              - label: "Presentation"
             name: "presentation"
-            widget: "string"
-            required: false
 
       - label: "Social networks"
         name: "socialNetworks"
