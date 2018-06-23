@@ -1,13 +1,7 @@
 import React, { Component } from 'react'
 
-import Loader from './loader'
+import VideoLoader from './loader'
 import Popup from './popup'
-
-const VideoLoader = Loader.extend`
-  &:after {
-    background-color: rgb(240, 236, 236);
-  }
-`
 
 const initialState = {
   isPlaying: false,
@@ -40,6 +34,7 @@ class Video extends Component {
           {!this.state.isLoaded ? <VideoLoader size="80" border="8" /> : null}
           <iframe
             src={this.props.src}
+            title="Youtube video"
             onLoad={this.onVideoLoad}
             style={{
               display: this.state.isLoaded ? 'initial' : 'none',
