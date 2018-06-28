@@ -22,6 +22,7 @@ import { FacebookIcon, VkIcon } from '../icons/social'
 import { HiddenText } from '../../utils/accessibility'
 import EventTalk from './talks/talk'
 import Layout from '../layout'
+import EventPhotos from './photos/event-photos'
 
 const EventTitle = styled.h1`
   ${fontSize};
@@ -208,6 +209,8 @@ const EventPage = ({ event }) => (
           </Box>
         </React.Fragment>
       )}
+
+      <EventPhotos />
 
       <DiscussionEmbed
         shortname="WebPurple"
