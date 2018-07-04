@@ -1,54 +1,92 @@
 import React from 'react'
-import styled from 'styled-components'
+import { withState, lifecycle, compose } from 'recompose'
+import { MorePicsBtn, Grid } from './atoms'
+import { Photo } from './photo'
+import Gallery from './gallery'
+import Popup from '../../common/popup'
+import clamp from 'ramda/src/clamp'
 
-import image1 from '../../../1.jpg'
-import image2 from '../../../2.jpg'
-import image3 from '../../../3.jpg'
+class EventPhotos extends React.Component {
+  state = {
+    page: 1,
+    selectedImage: -1,
+  }
 
-const photoArray = Array(25)
-  .fill(1)
-  .map(() => {
-    const r = Math.random() * 100
-    if (r < 33) {
-      return { src: image1, type: 'horizontal' }
-    }
-    if (r > 66) {
-      return { src: image3, type: 'horizontal' }
-    }
+  static defaultProps = {
+    offset: 10,
+    photos: [],
+  }
 
-    return { src: image2, type: 'vertical' }
-  })
+  render() {
+    return (
+      <React.Fragment>
+        <Grid>
+          {this.photos.map((photo, key) => (
+            <Photo
+              onClick={() => this.setState({ selectedImage: key })}
+              key={key}
+              image={photo}
+            />
+          ))}
+        </Grid>
+        {this.showLoadMoreBrn ? (
+          <MorePicsBtn onClick={this.incrementPage}>more pics</MorePicsBtn>
+        ) : null}
+        {this.state.selectedImage === -1 ? null : (
+          <Popup
+            isOpen={true}
+            onRequestClose={() => this.setState({ selectedImage: -1 })}>
+            <Gallery
+              photos={this.props.photos}
+              selectedImage={this.state.selectedImage}
+              onSelectPhoto={this.handlePhotoSelection}
+            />
+          </Popup>
+        )}
+      </React.Fragment>
+    )
+  }
 
-let Grid = styled.div`
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-auto-rows: 200px;
-`
+  get photos() {
+    return this.props.photos.slice(0, this.state.page * this.props.offset)
+  }
 
-let ImageDiv = styled.div`
-  overflow: hidden;
-  grid-row-end: span ${props => props.rowSpan};
-`
+  incrementPage = () => {
+    this.setState({ page: this.state.page + 1 })
+  }
 
-let Img = styled.img`
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-`
+  get showLoadMoreBrn() {
+    return this.props.photos.length - this.state.page * this.props.offset > 0
+  }
 
-const Image = ({ image: { src, type } }) => {
-  return (
-    <ImageDiv rowSpan={type === 'vertical' ? 2 : 1}>
-      <Img src={src} />
-    </ImageDiv>
-  )
+  handlePhotoSelection = newPhotoIndex =>
+    this.setState({
+      selectedImage: clamp(0, this.props.photos.length, newPhotoIndex),
+    })
 }
 
-const EventPhotos = ({ photos = photoArray }) => {
-  return (
-    <Grid>{photos.map((photo, key) => <Image key={key} image={photo} />)}</Grid>
-  )
-}
+const dimensions = new Map([['q', 'small'], ['y', 'middle'], ['w', 'big']])
 
-export default EventPhotos
+export default compose(
+  withState('photos', 'setPhotos'),
+  lifecycle({
+    componentDidMount() {
+      fetch(
+        'http://webpurple-provider.herokuapp.com/albums/-94098151/254801191?token=6a2750226a2750226a275022',
+      )
+        .then(r => r.json())
+        .then(({ items }) =>
+          items.map(item => {
+            const newSizes = item.sizes
+              .filter(({ type }) => dimensions.has(type))
+              .reduce((acc, i) => {
+                acc[dimensions.get(i.type)] = i
+                return acc
+              }, {})
+            return { ...item, sizes: newSizes }
+          }),
+        )
+        .then(photos => this.props.setPhotos(photos))
+    },
+  }),
+)(EventPhotos)

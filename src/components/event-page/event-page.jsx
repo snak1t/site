@@ -102,12 +102,12 @@ let EventSocialNetworks = ({ socialNetworks }) => (
           {sn.type === 'vk' ? (
             <React.Fragment>
               <HiddenText>Event in vkontakte</HiddenText>
-              <StyledVkIcon height={['3rem', '3.6rem']} />
+              <StyledVkIcon height="3rem" />
             </React.Fragment>
           ) : (
             <React.Fragment>
               <HiddenText>Event in Facebook</HiddenText>
-              <StyledFbIcon height={['3rem', '3.6rem']} />
+              <StyledFbIcon height="3rem" />
             </React.Fragment>
           )}
         </a>
@@ -210,6 +210,7 @@ const EventPage = ({ event }) => (
         </React.Fragment>
       )}
 
+      <BlockHeader>Past event photos</BlockHeader>
       <EventPhotos />
 
       <DiscussionEmbed
