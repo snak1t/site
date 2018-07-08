@@ -2,9 +2,6 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
 import styled, { injectGlobal } from 'styled-components'
-import { Media } from '../../utils/css-utils'
-
-import CloseIcon from '../icons/close-icon'
 
 injectGlobal`
   body.ReactModal__Body--open {
@@ -37,22 +34,6 @@ const PopupWindow = styled.div`
   }
 `
 
-const IconButton = styled.button`
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  position: absolute;
-  width: auto;
-  height: auto;
-  right: -4rem;
-  top: -2rem;
-  left: auto;
-
-  &:hover #closeIcon {
-    stroke: #ababab;
-  }
-`
 const customStyles = {
   overlay: {
     alignItems: 'center',
@@ -82,14 +63,7 @@ const Popup = ({ children, onRequestClose, ...rest }) => (
     parentSelector={() => document.body}
     style={customStyles}>
     <PopupWindow>
-      <PopupWindowContainer>
-        <Media.TabletPlus>
-          <IconButton onClick={onRequestClose}>
-            <CloseIcon />
-          </IconButton>
-        </Media.TabletPlus>
-        {children}
-      </PopupWindowContainer>
+      <PopupWindowContainer>{children}</PopupWindowContainer>
     </PopupWindow>
   </Modal>
 )
