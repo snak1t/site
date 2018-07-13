@@ -49,27 +49,29 @@ class Video extends Component {
         {this.props.children({
           onClick: this.showPopup,
         })}
-        <Popup onRequestClose={this.closePopup} isOpen={this.state.isPlaying}>
-          <Media.TabletPlus>
-            <IconButton onClick={this.closePopup}>
-              <CloseIcon />
-            </IconButton>
-          </Media.TabletPlus>
-          {!this.state.isLoaded ? <VideoLoader size="80" border="8" /> : null}
-          <iframe
-            src={this.props.src}
-            title="Youtube video"
-            onLoad={this.onVideoLoad}
-            style={{
-              display: this.state.isLoaded ? 'initial' : 'none',
-              width: '100%',
-              height: '100%',
-            }}
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          />
-        </Popup>
+        {this.state.isPlaying ? (
+          <Popup onRequestClose={this.closePopup}>
+            <Media.TabletPlus>
+              <IconButton onClick={this.closePopup}>
+                <CloseIcon />
+              </IconButton>
+            </Media.TabletPlus>
+            {!this.state.isLoaded ? <VideoLoader size="80" border="8" /> : null}
+            <iframe
+              src={this.props.src}
+              title="Youtube video"
+              onLoad={this.onVideoLoad}
+              style={{
+                display: this.state.isLoaded ? 'initial' : 'none',
+                width: '100%',
+                height: '100%',
+              }}
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            />
+          </Popup>
+        ) : null}
       </React.Fragment>
     )
   }

@@ -1,15 +1,16 @@
 import React from 'react'
 import { withState, lifecycle, compose } from 'recompose'
+import clamp from 'ramda/src/clamp'
 import { MorePicsBtn, Grid } from './atoms'
 import { Photo } from './photo'
 import Gallery from './gallery'
 import Popup from '../../common/popup'
-import clamp from 'ramda/src/clamp'
+import BlockHeader from '../../common/block-header'
 
 class EventPhotos extends React.Component {
   state = {
     page: 1,
-    selectedImage: -1,
+    selectedPhotoIndex: -1,
   }
 
   static defaultProps = {
@@ -18,12 +19,16 @@ class EventPhotos extends React.Component {
   }
 
   render() {
+    if (this.props.photos.length === 0) {
+      return null
+    }
     return (
       <React.Fragment>
+        <BlockHeader>Past event photos</BlockHeader>
         <Grid>
           {this.photos.map((photo, key) => (
             <Photo
-              onClick={() => this.setState({ selectedImage: key })}
+              onClick={() => this.setState({ selectedPhotoIndex: key })}
               key={key}
               image={photo}
             />
@@ -32,13 +37,12 @@ class EventPhotos extends React.Component {
         {this.showLoadMoreBrn ? (
           <MorePicsBtn onClick={this.incrementPage}>more pics</MorePicsBtn>
         ) : null}
-        {this.state.selectedImage === -1 ? null : (
+        {this.state.selectedPhotoIndex === -1 ? null : (
           <Popup
-            isOpen={true}
-            onRequestClose={() => this.setState({ selectedImage: -1 })}>
+            onRequestClose={() => this.setState({ selectedPhotoIndex: -1 })}>
             <Gallery
               photos={this.props.photos}
-              selectedImage={this.state.selectedImage}
+              selectedPhotoIndex={this.state.selectedPhotoIndex}
               onSelectPhoto={this.handlePhotoSelection}
             />
           </Popup>
@@ -61,7 +65,7 @@ class EventPhotos extends React.Component {
 
   handlePhotoSelection = newPhotoIndex =>
     this.setState({
-      selectedImage: clamp(0, this.props.photos.length, newPhotoIndex),
+      selectedPhotoIndex: clamp(0, this.props.photos.length, newPhotoIndex),
     })
 }
 

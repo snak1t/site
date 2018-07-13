@@ -59,6 +59,7 @@ Modal.setAppElement('#___gatsby')
 const Popup = ({ children, onRequestClose, ...rest }) => (
   <Modal
     {...rest}
+    isOpen={true}
     onRequestClose={onRequestClose}
     parentSelector={() => document.body}
     style={customStyles}>

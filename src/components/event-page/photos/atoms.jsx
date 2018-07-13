@@ -58,18 +58,23 @@ export let CentralPhoto = styled.img`
   flex: 1;
 `
 
-export let GalleryPhotoRow = styled.div`
-  display: flex;
+export let GalleryPhotoSlider = styled.div`
   width: 100%;
   height: 110px;
   overflow: hidden;
   margin: 1rem 0;
 `
+
+export let GalleryPhotoRow = styled.div`
+  display: flex;
+  height: 100%;
+`
 export let GalleryPreviewPhoto = styled.img`
   object-fit: cover;
   object-position: center center;
-  width: calc(65rem / 5);
+  width: 13rem;
   margin: 0 0.5rem;
+  cursor: pointer;
 `
 
 export let GalleryArrow = styled.div`

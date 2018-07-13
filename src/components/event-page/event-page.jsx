@@ -210,7 +210,6 @@ const EventPage = ({ event }) => (
         </React.Fragment>
       )}
 
-      <BlockHeader>Past event photos</BlockHeader>
       <EventPhotos />
 
       <DiscussionEmbed
