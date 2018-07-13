@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react'
 import {
   GalleryContainer,
@@ -9,6 +10,7 @@ import {
   GalleryPhotoSlider,
 } from './atoms'
 import ArrowButton from '../../arrow-button/arrow-button'
+import SwipeEventEmitter from '../../swipe.event'
 
 const photoWidth = 14
 
@@ -19,7 +21,41 @@ const calculateTranslation = (index, photoWidth) => {
 
   return (index - 2) * photoWidth
 }
-class Gallery extends Component {
+
+type State = {
+  translationDistance: number,
+}
+
+type Photo = {
+  sizes: {
+    big: {
+      url: string,
+    },
+    small: {
+      url: string,
+    },
+  },
+}
+
+type Props = {
+  selectedPhotoIndex: number,
+  onSelectPhoto: (index: number) => void,
+  photos: [Photo],
+}
+class Gallery extends Component<Props, State> {
+  state = {
+    translationDistance: 0, // calculateTranslation(selectedPhotoIndex, photoWidth),
+  }
+
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    const translationDistance = calculateTranslation(
+      nextProps.selectedPhotoIndex,
+      photoWidth,
+    )
+    return {
+      translationDistance,
+    }
+  }
   render() {
     const { photos, selectedPhotoIndex, onSelectPhoto } = this.props
     return (
@@ -38,13 +74,13 @@ class Gallery extends Component {
           </GalleryArrow>
         </GalleryMainBlock>
         <GalleryPhotoSlider>
+          <SwipeEventEmitter
+            onRelease={this.onSwipeRelease}
+            onHorizontalMove={this.updatePosition}
+          />
           <GalleryPhotoRow
-            onDragOver={e => console.log(e)}
             style={{
-              transform: `translateX(-${calculateTranslation(
-                selectedPhotoIndex,
-                photoWidth,
-              )}rem)`,
+              transform: `translateX(-${this.state.translationDistance}rem)`,
             }}>
             {photos.map((photo, key) => (
               <GalleryPreviewPhoto
@@ -57,6 +93,17 @@ class Gallery extends Component {
         </GalleryPhotoSlider>
       </GalleryContainer>
     )
+  }
+
+  onSwipeRelease = (e: { distance: number }) => {
+    console.log(e)
+  }
+  updatePosition = (e: { distance: number }) => {
+    console.log(e)
+    // this.setState(pState => ({
+    //   ...pState,
+    //   translationDistance: (pState.translationDistance * 10 + e.distance) / 10,
+    // }))
   }
 }
 

@@ -138,15 +138,17 @@ class MobileMenu extends Component {
   }
   showMenu = () => {
     document.body.style.overflow = 'hidden'
-    return this.setState({
+    return this.setState(ps => ({
+      ...ps,
       isMenuOpen: true,
-    })
+    }))
   }
   hideMenu = () => {
     document.body.style.overflow = 'visible'
-    return this.setState({
+    return this.setState(ps => ({
+      ...ps,
       isMenuOpen: false,
-    })
+    }))
   }
 }
 
