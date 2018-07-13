@@ -1,4 +1,5 @@
 import React from 'react'
+import { graphql } from 'gatsby'
 import { mapProps } from 'recompose'
 
 import SubscriptionForm from '../components/subscription-form/subscription-form'
@@ -18,9 +19,10 @@ export default mapProps(
       allSpeakerYaml: { edges: allUsers },
     },
   }) => ({
-    speakers: allUsers.map(s => ({
-      ...s.node,
-      talks: s.node.fields.talks,
+    speakers: allUsers.map(({ node: { fields, ...speaker } }) => ({
+      ...speaker,
+      slug: fields.slug,
+      talks: fields.talks,
     })),
   }),
 )(SpeakersPage)
@@ -34,6 +36,7 @@ export const pageQuery = graphql`
       edges {
         node {
           fields {
+            slug
             talks {
               title
             }

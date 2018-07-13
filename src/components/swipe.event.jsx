@@ -1,9 +1,8 @@
 import { Component } from 'react'
-
+import canUseDom from 'can-use-dom'
 class SwipeEventEmitter extends Component {
-  startCoords = {
-    x: null,
-    y: null,
+  state = {
+    hammerElement: null,
   }
 
   horizontalStarted = true
@@ -11,93 +10,38 @@ class SwipeEventEmitter extends Component {
 
   static defaultProps = {
     onHorizontalMove: () => {},
-    onVerticalMove: () => {},
     onRelease: () => {},
     offset: 30,
   }
+
   componentDidMount() {
-    document.body.addEventListener('touchstart', this.handleStart)
-    document.body.addEventListener('touchmove', this.handleMove)
-    document.body.addEventListener('touchend', this.handleEnd)
-    document.body.addEventListener('mousedown', this.handleStart)
-    document.body.addEventListener('mousemove', this.handleMove)
-    document.body.addEventListener('mouseup', this.handleEnd)
+    if (canUseDom) {
+      import('hammerjs').then(module => {
+        const Hammer = module.default
+        const hammerElement = new Hammer(document.body, {
+          direction: module.DIRECTION_HORIZONTAL,
+          threshold: this.props.offset,
+        })
+        hammerElement.on('panmove', this.handleMove)
+        hammerElement.on('panend', this.handleEnd)
+        this.setState({ hammerElement })
+      })
+    }
   }
 
   componentWillUnmount() {
-    document.body.removeEventListener('touchstart', this.handleStart)
-    document.body.removeEventListener('touchmove', this.handleMove)
-    document.body.removeEventListener('touchend', this.handleEnd)
-    document.body.removeEventListener('mousedown', this.handleStart)
-    document.body.removeEventListener('mousemove', this.handleMove)
-    document.body.removeEventListener('mouseup', this.handleEnd)
-  }
-
-  handleStart = e => {
-    this.startCoords = this.getCoordsFromEvent(e)
+    this.state.hammerElement.off('panmove', this.handleMove)
+    this.state.hammerElement.off('panend', this.handleEnd)
   }
 
   handleEnd = e => {
-    const [katet1, katet2] = this.getKatets(e)
-    this.startCoords = {
-      x: null,
-      y: null,
-    }
-    if (this.horizontalStarted) {
-      this.horizontalStarted = false
-      return this.props.onRelease({ distance: katet1 })
-    }
-
-    if (this.verticalStarted) {
-      this.verticalStarted = false
-      return this.props.onRelease({ distance: katet2 })
-    }
+    this.props.onRelease({ distance: e.deltaX || 0 })
   }
 
   handleMove = e => {
-    const { onHorizontalMove, onVerticalMove } = this.props
-    const [katet1, katet2] = this.getKatets(e)
-    if (this.isHorizontal(katet1, katet2) || this.horizontalStarted) {
-      this.horizontalStarted = true
-      onHorizontalMove({ distance: katet1 })
-    }
-    if (this.isVertical(katet1, katet2) || this.verticalStarted) {
-      this.verticalStarted = true
-      onVerticalMove({ distance: katet2 })
-    }
+    this.props.onHorizontalMove({ distance: e.deltaX || 0 })
   }
 
-  isHorizontal(x, y) {
-    return (
-      Math.abs(y) < this.props.offset * 2 && Math.abs(x) > this.props.offset
-    )
-  }
-  isVertical(x, y) {
-    return (
-      Math.abs(x) < this.props.offset * 2 && Math.abs(y) > this.props.offset
-    )
-  }
-
-  getKatets(event) {
-    const currentCoords = this.getCoordsFromEvent(event)
-    const katet1 = currentCoords.x - this.startCoords.x
-    const katet2 = currentCoords.y - this.startCoords.y
-    return [katet1, katet2]
-  }
-
-  getCoordsFromEvent(event) {
-    if (event.changedTouches) {
-      return {
-        x: event.changedTouches[0].clientX,
-        y: event.changedTouches[0].clientY,
-      }
-    }
-
-    return {
-      x: event.screenX,
-      y: event.screenY,
-    }
-  }
   render() {
     return null
   }

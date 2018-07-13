@@ -1,8 +1,14 @@
+import { graphql } from 'gatsby'
 import { mapProps } from 'recompose'
 import EventPage from '../components/event-page/event-page'
 
 export default mapProps(
-  ({ data: { eventYaml: event, allSpeakerYaml: { edges: allSpeakers } } }) => {
+  ({
+    data: {
+      eventYaml: event,
+      allSpeakerYaml: { edges: allSpeakers },
+    },
+  }) => {
     return {
       event: {
         ...event,

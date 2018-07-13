@@ -14,11 +14,29 @@ const SubscriptionFormContainer = styled.section`
   align-items: center;
   justify-content: center;
   padding: 6em 2em;
+  background-size: cover;
+  transform: translateZ(0);
+  background: url(${subscibtionBackground()});
+  background-position: top center;
   ${media.desktop`padding: 10em 2em;`};
 
-  background-size: cover;
-  background: #9300ef url(${subscibtionBackground()});
-  background-blend-mode: soft-light;
+  position: relative;
+
+  & > * {
+    position: relative;
+  }
+
+  &:before {
+    position: absolute;
+    background: linear-gradient(to bottom, #be00ff, #6200ff);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    display: block;
+    opacity: 0.75;
+  }
 `
 
 const Header = styled.h2`
@@ -37,7 +55,6 @@ const SubHeader = styled.p`
   text-align: center;
   margin: 0;
   margin-bottom: 2.86rem; /* 40px */
-  font-family: 'Oxygen', sans-serif;
   color: #fff;
   font-size: 1.4em;
   ${media.tablet`
@@ -56,7 +73,6 @@ const FormWrapper = styled.form`
 `
 
 const Input = styled.input`
-  font-family: 'Oxygen', sans-serif;
   font-size: 2.4em;
   box-sizing: border-box;
   width: 100%;

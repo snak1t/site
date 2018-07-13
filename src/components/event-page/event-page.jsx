@@ -22,6 +22,7 @@ import { FacebookIcon, VkIcon } from '../icons/social'
 import { HiddenText } from '../../utils/accessibility'
 import EventTalk from './talks/talk'
 import Layout from '../layout'
+import EventPhotos from './photos/event-photos'
 
 const EventTitle = styled.h1`
   ${fontSize};
@@ -31,13 +32,11 @@ const EventTitle = styled.h1`
 `
 
 const Description = styled.div`
-  font-family: Oxygen, sans-serif;
   color: ${props => props.theme.greyishBrown};
 `
 
 const InfoText = styled.div`
   margin-bottom: 2.5rem;
-  font-family: Oxygen, sans-serif;
   font-weight: bold;
   color: ${props => props.theme.greyishBrown};
   font-size: 1.6rem;
@@ -101,12 +100,12 @@ let EventSocialNetworks = ({ socialNetworks }) => (
           {sn.type === 'vk' ? (
             <React.Fragment>
               <HiddenText>Event in vkontakte</HiddenText>
-              <StyledVkIcon height={['3rem', '3.6rem']} />
+              <StyledVkIcon height="3rem" />
             </React.Fragment>
           ) : (
             <React.Fragment>
               <HiddenText>Event in Facebook</HiddenText>
-              <StyledFbIcon height={['3rem', '3.6rem']} />
+              <StyledFbIcon height="3rem" />
             </React.Fragment>
           )}
         </a>
@@ -191,7 +190,11 @@ const EventPage = ({ event }) => (
       <BlockHeader>Talks</BlockHeader>
       <Flex flexWrap="wrap" mt="6.4rem" mx="-1rem">
         {event.talks.map(talk => (
-          <Box width={[1, 1, 1 / 2]} p="1rem" key={talk.title}>
+          <Box
+            width={[1, 1, 1 / 2]}
+            p="10px"
+            mb={['60px', '64px']}
+            key={talk.title}>
             <EventTalk talk={talk} />
           </Box>
         ))}
@@ -208,6 +211,8 @@ const EventPage = ({ event }) => (
           </Box>
         </React.Fragment>
       )}
+
+      <EventPhotos />
 
       <DiscussionEmbed
         shortname="WebPurple"

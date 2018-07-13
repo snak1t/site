@@ -21,7 +21,6 @@ const Avatar = styled.img`
 
 const Name = styled.span`
   font-size: 2.4rem;
-  font-family: 'Oxygen', sans-serif;
   padding-top: 1rem;
   color: ${props => props.theme.grape};
 `
@@ -43,7 +42,6 @@ const StyledLoader = styled(Loader)`
 `
 
 const Note = styled.footer`
-  font-family: 'Oxygen', sans-serif;
   color: ${props => props.theme.warmGrey};
   font-size: 1.8rem;
   margin: 3rem auto;
@@ -88,9 +86,13 @@ export default compose(
   withState('contributors', 'setContributors'),
   lifecycle({
     componentDidMount() {
-      fetch('https://api.github.com/repos/kitos/web-purple/contributors')
+      fetch('https://api.github.com/repos/WebPurple/site/contributors')
         .then(r => r.json())
-        .then(contributors => this.props.setContributors(contributors))
+        .then(contributors =>
+          this.props.setContributors(
+            Array.isArray(contributors) ? contributors : [],
+          ),
+        )
     },
   }),
 )(ContributorsPage)
