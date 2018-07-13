@@ -8,21 +8,21 @@
     "can-use-dom": "^0.1.0",
     "disqus-react": "^1.0.5",
     "downshift": "^2.0.3",
-    "gatsby": "^2.0.0-beta.1",
-    "gatsby-link": "^2.0.0-beta.1",
+    "gatsby": "^2.0.0-beta.20",
+    "gatsby-link": "^2.0.0-beta.3",
     "gatsby-plugin-algolia": "0.0.4",
-    "gatsby-plugin-google-analytics": "^2.0.0-beta.1",
-    "gatsby-plugin-netlify": "^2.0.0-beta.1",
-    "gatsby-plugin-netlify-cms": "^2.0.0-beta.1",
-    "gatsby-plugin-react-helmet": "^3.0.0-beta.1",
-    "gatsby-plugin-sharp": "^2.0.0-beta.1",
-    "gatsby-plugin-sitemap": "^2.0.0-beta.1",
-    "gatsby-plugin-styled-components": "^3.0.0-beta.1",
-    "gatsby-remark-images": "^2.0.1-beta.1",
-    "gatsby-source-filesystem": "^2.0.1-beta.1",
-    "gatsby-transformer-remark": "^2.1.1-beta.1",
-    "gatsby-transformer-sharp": "^2.1.1-beta.1",
-    "gatsby-transformer-yaml": "^2.1.1-beta.1",
+    "gatsby-plugin-google-analytics": "^2.0.0-beta.2",
+    "gatsby-plugin-netlify": "^2.0.0-beta.2",
+    "gatsby-plugin-netlify-cms": "^2.0.0-beta.5",
+    "gatsby-plugin-react-helmet": "^3.0.0-beta.3",
+    "gatsby-plugin-sharp": "^2.0.0-beta.2",
+    "gatsby-plugin-sitemap": "^2.0.0-beta.2",
+    "gatsby-plugin-styled-components": "^3.0.0-beta.2",
+    "gatsby-remark-images": "^2.0.1-beta.3",
+    "gatsby-source-filesystem": "^2.0.1-beta.3",
+    "gatsby-transformer-remark": "^2.1.1-beta.2",
+    "gatsby-transformer-sharp": "^2.1.1-beta.3",
+    "gatsby-transformer-yaml": "^2.1.1-beta.2",
     "grid-styled": "^4.2.0",
     "lodash": "^4.17.5",
     "lodash-webpack-plugin": "^0.11.4",
@@ -43,6 +43,7 @@
     "react-popper": "^1.0.0",
     "react-portal": "^4.1.4",
     "react-responsive": "^4.1.0",
+    "react-spring": "^5.3.18",
     "react-vk": "^2.0.6",
     "react-yandex-metrika": "^2.3.0",
     "recompose": "^0.27.1",
@@ -64,9 +65,10 @@
     "build": "gatsby build",
     "develop": "gatsby develop",
     "serve": "gatsby serve",
+    "flow": "flow",
     "format": "prettier --write \"{gatsby-*.js?,src/**/*.js,src/**/*.jsx}\"",
     "prettier-ci": "prettier --list-different \"{gatsby-*.js,src/**/*.jsx}\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "prettier": {
     "semi": false,
@@ -74,8 +76,26 @@
     "trailingComma": "all",
     "jsxBracketSameLine": true
   },
+  "jest": {
+    "setupTestFrameworkScriptFile": "./setupTests.js",
+    "transform": {
+      "^.+\\.jsx?$": "<rootDir>/jestPreprocess.js"
+    }
+  },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.52",
+    "babel-jest": "^23.2.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "extract-text-webpack-plugin": "^3.0.2",
+    "flow-bin": "^0.75.0",
+    "jest": "^23.2.0",
+    "jest-enzyme": "^6.0.2",
+    "pre-commit": "^1.2.2",
     "prettier": "^1.13.5"
-  }
+  },
+  "pre-commit": [
+    "flow",
+    "format"
+  ]
 }

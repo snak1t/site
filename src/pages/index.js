@@ -1,4 +1,5 @@
 import React from 'react'
+import { graphql } from 'gatsby'
 import { mapProps } from 'recompose'
 import Helmet from 'react-helmet'
 
@@ -24,7 +25,11 @@ const IndexPage = ({ upcomingEvent, pastTalks }) => (
 )
 
 export default mapProps(
-  ({ data: { allEventYaml: { edges: allEventNodes } } }) => {
+  ({
+    data: {
+      allEventYaml: { edges: allEventNodes },
+    },
+  }) => {
     let extendTalk = event => talk => ({ ...talk, event })
 
     let pastTalks = selectPastEvents(allEventNodes).reduce(
@@ -53,6 +58,9 @@ export const pageQuery = graphql`
             talks {
               title
               speaker {
+                fields {
+                  slug
+                }
                 title
                 avatar
                 organization
